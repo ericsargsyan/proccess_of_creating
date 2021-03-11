@@ -37,9 +37,7 @@ def embed_urls(urls):
 	return embedded_urls
 
 
-
-
-# page_obj = []
+page_obj = []
 @login_required
 def search_results(request):
 	global page_obj
@@ -121,19 +119,19 @@ class search_results(ListView):
 	template_name = "search_download/search_result.html"
 
 
-	# def get(self):
-	# 	url = self.request.GET.get('url')
-	#
-	# 	try:
-	# 		results = YoutubeSearch(url, max_results=20).to_dict()
-	# 	except:
-	# 		results = []
-	#
-	# 	context = {
-	# 		'results': results,
-	#
-	# 	}
-	# 	return render(self.request, 'search_download/search_result.html', context)
+	def get(self):
+		url = self.request.GET.get('url')
+	
+		try:
+			results = YoutubeSearch(url, max_results=20).to_dict()
+		except:
+			results = []
+	
+		context = {
+			'results': results,
+	
+		}
+		return render(self.request, 'search_download/search_result.html', context)
 
 	def post(self, *args, **kwargs):
 		request = self.request
@@ -185,9 +183,9 @@ class search_results(ListView):
 
 		return results
 
-	#
-	# def paginate_queryset(self, results, num):
-	# 	super().paginate_queryset(results, self.paginate_by)
+	
+	def paginate_queryset(self, results, num):
+		super().paginate_queryset(results, self.paginate_by)
 
 
 @login_required
@@ -220,7 +218,7 @@ def download(request, id):
 			os.mkdir(video_folder)
 		os.chdir(video_folder)
 		with youtube_dl.YoutubeDL(options) as ydl:
-			# messages.success(request, "The video have been successfully downloaded!")
+			messages.success(request, "The video have been successfully downloaded!")
 			ydl.download([video_url])
 		os.chdir("..")
 
